@@ -1,0 +1,14 @@
+JavaScript syntax check for simulation.mjs: PASS
+JavaScript syntax check for app.js: PASS
+Simulation logic tests in tests.mjs: PASS
+
+Covered behaviours:
+- Lane 1 and Lane 2 spawn positions
+- 2 spaces before each speaker
+- 1 space = 1 second movement
+- Total time starts only after order is physically left
+- Blocked section timers continue counting until the car actually leaves
+- Lane 2 two-gap path to cash
+- Merge priority uses first completed order
+- Completed cars only update averages
+- Yellow and red total-time threshold events
