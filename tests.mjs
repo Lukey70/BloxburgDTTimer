@@ -32,7 +32,7 @@ function completeSingleLane1Car(sim, opts = {}) {
 
 function testTargetsUpdated() {
   assert.equal(TARGETS.present, 60, 'Present target should be 60 seconds');
-  assert.equal(TARGETS.total, 60, 'Total target should remain 60 seconds');
+  assert.equal(TARGETS.total, 90, 'Total target should be 90 seconds');
 }
 
 function testSpawnAndMovement() {
@@ -185,6 +185,7 @@ function testCompletedCarsOnlyAffectAverages() {
   assert.equal(scoreboard.order1.avg, completed.timings.order1);
   assert.equal(scoreboard.cash.avg, completed.timings.cash);
   assert.equal(scoreboard.total.avg, completed.timings.total);
+  assert.equal(scoreboard.total.pct, completed.timings.total <= 90 ? 100 : 0, 'Total percentage should use the 90 second target');
   assert.equal(scoreboard.present.pct, completed.timings.present <= 60 ? 100 : 0, 'Present percentage should use the 60 second target');
 }
 

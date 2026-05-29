@@ -111,3 +111,16 @@ This version embeds the audio files directly into `app.js` and uses the Web Audi
 - Re-centred the Lane 2 merge car on the curve while keeping it angled left into the shared lane.
 - Moved Order 1 and Order 2 labels closer to the drive-thru, but still outside the lane.
 - Moved the live Cars in Lane / Total Time panel left so it sits outside the drive-thru lane.
+
+
+## Latest timing and lane-centering updates
+
+- Total target time changed to 1:30.
+- Live Total Time and the Total result on the left now use green under 1:30, yellow from 1:30 up to under 2:00, and red at 2:00 and over.
+- Left-side average colours now use: Order 1 / Order 2 / Cash = green under 0:30, yellow 0:30-0:45, red over 0:45; Present = green under 1:00, yellow 1:00-1:30, red over 1:30.
+- Extended the visual entrance slightly more so spawned cars sit fully inside the lane.
+- Fine-tuned the Lane 2 merge-turn car position again so it sits more centrally between the lane edges while turning.
+
+- Extended the visual entry lane a touch further again and moved the spawn centres so cars start fully inside the lane.
+- Extended the present lane a touch further again so the present car sits fully inside the lane.
+- Fine-tuned the Lane 2 merge-turn car again to sit closer to the centre of the curved lane.

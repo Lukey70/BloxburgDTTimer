@@ -74,7 +74,10 @@ h1 { font-size: clamp(2.4rem, 4vw, 4.8rem); line-height: 0.95; }
 .score-row { display: grid; grid-template-columns: 1.6fr 0.75fr 0.55fr; gap: 12px; align-items: baseline; margin: 16px 0; }
 .score-row .name { font-size: clamp(1.5rem, 2.2vw, 2.2rem); font-weight: 900; }
 .goal { color: var(--green); font-size: 0.48em; margin-left: 8px; }
-.avg { font-size: clamp(2rem, 2.6vw, 3rem); color: var(--orange); font-weight: 900; text-align: right; }
+.avg { font-size: clamp(2rem, 2.6vw, 3rem); font-weight: 900; text-align: right; }
+.avg-good { color: var(--green); }
+.avg-mid { color: var(--yellow); }
+.avg-bad { color: var(--red); }
 .pct { font-size: clamp(1.8rem, 2.4vw, 2.8rem); font-weight: 900; text-align: right; }
 .pct-good { color: var(--green); }
 .pct-mid { color: var(--yellow); }

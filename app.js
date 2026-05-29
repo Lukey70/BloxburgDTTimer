@@ -4,7 +4,7 @@ const TARGETS = {
   order2: 30,
   cash: 30,
   present: 60,
-  total: 60,
+  total: 90,
 };
 
 const STATUS_THRESHOLDS = {
@@ -310,17 +310,17 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 const MAP_SIZE = { width: 920, height: 710 };
 
 const POSITION_UI = {
-  present: { x: 178, y: 112, rotation: 180 },
-  gap_present1: { x: 302, y: 112, rotation: 180 },
-  cash: { x: 426, y: 112, rotation: 180 },
-  gap_cash1: { x: 550, y: 112, rotation: 180 },
-  gap_cash2: { x: 708, y: 182, rotation: -132 },
+  present: { x: 176, y: 112, rotation: 180 },
+  gap_present1: { x: 300, y: 112, rotation: 180 },
+  cash: { x: 424, y: 112, rotation: 180 },
+  gap_cash1: { x: 548, y: 112, rotation: 180 },
+  gap_cash2: { x: 706, y: 188, rotation: -134 },
   order1: { x: 646, y: 270, rotation: -90 },
   order2: { x: 758, y: 262, rotation: -90 },
-  lane1_pre1: { x: 646, y: 385, rotation: -90 },
-  lane1_pre2: { x: 646, y: 500, rotation: -90 },
-  lane2_pre1: { x: 758, y: 385, rotation: -90 },
-  lane2_pre2: { x: 758, y: 500, rotation: -90 },
+  lane1_pre1: { x: 646, y: 392, rotation: -90 },
+  lane1_pre2: { x: 646, y: 512, rotation: -90 },
+  lane2_pre1: { x: 758, y: 392, rotation: -90 },
+  lane2_pre2: { x: 758, y: 512, rotation: -90 },
 };
 
 const simulator = new DriveThruSimulator(loadState());
@@ -360,6 +360,24 @@ function statusColourForPct(pct) {
   return 'pct-bad';
 }
 
+function avgClassForKey(key, seconds) {
+  if (key === 'order1' || key === 'order2' || key === 'cash') {
+    if (seconds < 30) return 'avg-good';
+    if (seconds <= 45) return 'avg-mid';
+    return 'avg-bad';
+  }
+  if (key === 'present') {
+    if (seconds < 60) return 'avg-good';
+    if (seconds <= 90) return 'avg-mid';
+    return 'avg-bad';
+  }
+  if (key === 'total') {
+    if (seconds < 90) return 'avg-good';
+    if (seconds < 120) return 'avg-mid';
+    return 'avg-bad';
+  }
+  return 'avg-good';
+}
 
 function statusFromTotal(total) {
   if (total >= STATUS_THRESHOLDS.red) return 'red';
@@ -520,7 +538,9 @@ function renderScoreboard() {
   ];
   for (const [key, avgSelector, pctSelector] of mappings) {
     const data = scores[key];
-    $(avgSelector).textContent = formatTime(data.avg);
+    const avgEl = $(avgSelector);
+    avgEl.textContent = formatTime(data.avg);
+    avgEl.className = `avg ${avgClassForKey(key, data.avg)}`;
     const pctEl = $(pctSelector);
     pctEl.textContent = `${data.pct}%`;
     pctEl.className = `pct ${statusColourForPct(data.pct)}`;

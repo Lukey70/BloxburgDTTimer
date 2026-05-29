@@ -1,22 +1,28 @@
 JavaScript syntax check for simulation.mjs: PASS
 JavaScript syntax check for app.js: PASS
 Simulation logic tests in tests.mjs: PASS
-Longer drive-thru entry applied: PASS
-Longer present/end lane applied: PASS
-Spawn cars recalibrated so they are further apart and inside the lane: PASS
-Lane 2 merge car centred better on the curve and angled left: PASS
-Order 1 label moved right closer to the lane but outside it: PASS
-Order 2 label moved right closer to the lane but outside it: PASS
-Live Cars in Lane / Total Time panel moved left outside the lane: PASS
+Total target updated to 1:30 in logic and UI: PASS
+Live total time keeps green/yellow/red thresholds of 1:30 and 2:00: PASS
+Left-side Total average colours use 1:30 and 2:00 thresholds: PASS
+Left-side Order 1/Order 2/Cash average colours use 30 and 45 second thresholds: PASS
+Left-side Present average colours use 1:00 and 1:30 thresholds: PASS
+Average colour CSS classes present: PASS
+Entrance lane made longer again: PASS
+Present/end lane made longer again: PASS
+Spawn cars moved fully inside the entry lane: PASS
+Lane 2 merge-turn car fine-tuned toward the centre of the lane: PASS
 Ready-to-move tick indicators retained: PASS
-Fullscreen layout retained: PASS
 Embedded car assets retained: PASS
 Embedded sound data retained: PASS
 Web Audio playback retained: PASS
+Fullscreen layout retained: PASS
 
 Covered latest requested changes:
-- Longer visual entry so spawned cars sit inside the lane and are not touching each other
-- Longer visual end/present lane so the present car sits inside the lane better
-- Lane 2 merge car centred better on the corner while still facing left
-- Order 1 and Order 2 labels moved closer to the drive-thru but kept outside the lane
-- Live Cars in Lane / Total Time panel moved left so it no longer sits inside the lane
+- Total target is now 1:30 in the UI and scoreboard logic
+- Live Total Time and the Total result on the left use green under 1:30, yellow from 1:30 to under 2:00, and red at 2:00 and over
+- Order 1 / Order 2 / Cash averages use green under 0:30, yellow 0:30-0:45, and red over 0:45
+- Present average uses green under 1:00, yellow 1:00-1:30, and red over 1:30
+- Entry lane extended again so the spawn area is fully inside the lane
+- Present lane extended again so the present car sits fully inside the lane
+- Lane 2 merge-turn car re-centred again on the curved lane
+- Embedded car images and embedded sounds remain included

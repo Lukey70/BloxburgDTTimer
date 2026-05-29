@@ -3,7 +3,7 @@ export const TARGETS = {
   order2: 30,
   cash: 30,
   present: 60,
-  total: 60,
+  total: 90,
 };
 
 export const STATUS_THRESHOLDS = {
