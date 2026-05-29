@@ -1,14 +1,26 @@
 JavaScript syntax check for simulation.mjs: PASS
 JavaScript syntax check for app.js: PASS
 Simulation logic tests in tests.mjs: PASS
+Heading changed to Car Count: PASS
+Completed car counter present: PASS
+Fullscreen button present: PASS
+Fullscreen JS present: PASS
+Gap labels hidden/removed: PASS
+Smooth merge SVG present: PASS
+Solid map background only: PASS
+Embedded car images still present: PASS
+Embedded sound data still present: PASS
+Web Audio API sound playback retained: PASS
 
 Covered behaviours:
 - Lane 1 and Lane 2 spawn positions
-- 2 spaces before each speaker
-- 1 space = 1 second movement
-- Total time starts only after order is physically left
-- Blocked section timers continue counting until the car actually leaves
-- Lane 2 two-gap path to cash
+- Two spaces before each speaker
+- One space per second movement
+- Total time starts only after the car physically leaves order
+- Blocked section timers keep counting until the car actually leaves
+- Lane 1 has one gap to cash and Lane 2 has two gaps to cash in the movement logic
+- One gap between cash and present in the movement logic
 - Merge priority uses first completed order
-- Completed cars only update averages
-- Yellow and red total-time threshold events
+- Completed cars only update averages and percentages
+- Fullscreen mode shows the results board on the left and drive-thru map on the right
+- Embedded car assets and embedded sounds are retained
