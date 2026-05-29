@@ -1,0 +1,22 @@
+All uploaded sound files were included in assets/.
+
+simulation.js syntax: PASS
+
+script.js syntax: PASS
+
+simulation tests: PASS
+PASS default targets are 30 seconds for stations and 1 minute for total
+PASS Lane 1 and Lane 2 cars spawn two spaces before their speaker and play entry events
+PASS cars move one space per second before order and wait at speaker until released
+PASS cars wait if the space in front is occupied
+PASS order time is recorded at order release and total time starts only after leaving order
+PASS Lane 1 has one gap between Order 1 and Cash
+PASS Lane 2 has two gaps between Order 2 and Cash
+PASS button release waits if path is blocked and then automatically moves when clear
+PASS first completed order has priority at the merge into Cash
+PASS later car cannot jump ahead when earlier completed order is still approaching Cash
+PASS Cash has a one-space gap before Present and Present completion counts the car
+PASS yellow and red threshold sounds trigger once per car, with red repeated twice
+PASS car colour changes to yellow at 1 minute and red at 1:30 total time
+PASS left-side averages and percentages use completed cars only
+All drive-thru simulation tests passed.

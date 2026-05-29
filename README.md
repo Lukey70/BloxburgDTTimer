@@ -1,81 +1,68 @@
-# Two Lane Drive Thru Timer Website
+# Drive Thru Timer Website - Next Version
 
-This is a static GitHub Pages-ready drive thru timer dashboard.
+This is a static GitHub Pages-ready website for a two-lane drive-thru timer.
 
-## Version changes in this build
+## Included changes
 
-- Added two separate order lanes: Lane 1 and Lane 2.
-- Added separate buttons to add cars to Lane 1 or Lane 2.
-- Each car spawns two spaces before the speaker box.
-- Cars automatically move forward one space every second if the next space is clear.
-- If a car is in front, the car waits until the space opens.
-- The order timer starts when the car reaches its lane speaker box.
-- Lane 1 order time and Lane 2 order time are counted separately.
-- Total time does not include order time.
-- Total time starts only when the car leaves the order section.
-- After order, both lanes join the shared cash/present lane.
-- Cash and Present are completed manually using buttons.
+- Visual map-style drive-thru layout so cars can be seen moving through the route.
+- Two separate entry lanes: Lane 1 and Lane 2.
+- Cars spawn two spaces before their speaker/order box.
+- Cars move forward one space per second whenever the space ahead is clear.
+- Cars at Order, Cash and Present do not leave until the matching button is pressed.
+- If the button is pressed and the path ahead is blocked, the car is marked ready and automatically moves when clear.
+- Lane 1 has a one-space gap between Order 1 and Cash.
+- Lane 2 has a two-space gap between Order 2 and Cash.
+- There is a one-space gap between Cash and Present.
+- The car that completed ordering first gets priority at the merge into Cash.
+- Cars leaving Present are counted as completed cars.
+- Order time does not count toward total time.
+- Total time starts when the car leaves Order.
+- Left-side averages only update after a car leaves the drive-thru.
+- Percentages show the percentage of completed cars under target for that point.
+- All station targets are 30 seconds.
+- Total target is 1 minute.
+- Cars turn yellow after total time reaches 1 minute.
+- Cars turn red after total time reaches 1 minute 30 seconds.
+- Lane 1 entry plays `A Bass.wav`.
+- Lane 2 entry plays `Pre-Warn.mp3`.
+- Yellow threshold plays `SOUND181 (1).wav` once per car.
+- Red threshold plays `SOUND136.wav` twice back-to-back once per car.
 
 ## Controls
 
-### Buttons
+- **Add Car Lane 1**: adds a car to Lane 1 and plays the Lane 1 entry sound.
+- **Add Car Lane 2**: adds a car to Lane 2 and plays the Lane 2 entry sound.
+- **Complete Order 1**: releases the car at Order 1 when the path is clear.
+- **Complete Order 2**: releases the car at Order 2 when the path is clear.
+- **Complete Cash**: releases the car at Cash when the path to the Cash/Present gap is clear.
+- **Complete Present**: releases the car from Present and counts it as completed.
 
-- Add Car Lane 1
-- Add Car Lane 2
-- Complete Lane 1 Order
-- Complete Lane 2 Order
-- Complete Cash
-- Complete Present
-- Reset Day
+## Keyboard shortcuts
 
-### Keyboard shortcuts
+- `1` = Add Car Lane 1
+- `2` = Add Car Lane 2
+- `Q` = Complete Order 1
+- `W` = Complete Order 2
+- `C` = Complete Cash
+- `P` = Complete Present
 
-- `1` = Add car to Lane 1
-- `2` = Add car to Lane 2
-- `Q` = Complete Lane 1 order
-- `W` = Complete Lane 2 order
-- `C` = Complete cash
-- `P` = Complete present
+## GitHub Pages upload
 
-## How the timing works
+Upload all files and folders from this ZIP to your GitHub repository:
 
-### Before order
+- `index.html`
+- `styles.css`
+- `simulation.js`
+- `script.js`
+- `assets/`
+- `tests/` is optional but useful for development checks
 
-Cars are not included in total time before or during order.
+Then go to **Settings → Pages → Deploy from branch → main → /root**.
 
-### At speaker/order
+## Testing
 
-The order timer starts when the car reaches the speaker box.
+Automated tests are included in `tests/simulation.test.js`. They can be run locally with:
 
-### After order
-
-When you press **Complete Lane 1 Order** or **Complete Lane 2 Order**, the car leaves the order section and joins the shared lane. This is when total time starts.
-
-### Cash and present
-
-Cash and present are timed separately. Total time keeps counting until the car completes present.
-
-## How to publish on GitHub Pages
-
-1. Create a new GitHub repository.
-2. Upload these files:
-   - `index.html`
-   - `styles.css`
-   - `script.js`
-   - `README.md`
-3. Go to **Settings** → **Pages**.
-4. Choose **Deploy from a branch**.
-5. Select the `main` branch and `/root`.
-6. Save and wait for GitHub to provide the website URL.
-
-## Future upgrades
-
-This is still a front-end demo. A real restaurant system could later add:
-
-- Real car sensor integration
-- Camera/AI detection
-- Manager login
-- Daily reports
-- Export to CSV
-- Store settings
-- Database storage using Firebase or Supabase
+```bash
+node tests/simulation.test.js
+```

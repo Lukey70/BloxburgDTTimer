@@ -3,59 +3,59 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Two Lane Drive Thru Timer</title>
+  <title>Drive Thru Timer</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="app">
-    <header class="header">
+  <main class="app-shell">
+    <header class="topbar">
       <div>
         <p class="eyebrow">Drive Thru Timer System</p>
-        <h1>Two Lane Timer</h1>
-        <p class="subtext">Lane 1 and Lane 2 each have two waiting spaces before the speaker box. Cars move forward one space per second when the space ahead is clear.</p>
+        <h1>Two Lane Drive Thru Timer</h1>
+        <p class="intro">Cars move one space per second whenever the next space is clear. Order, Cash and Present hold cars until their button is pressed.</p>
       </div>
-      <div class="time-card">
-        <span id="modeLabel">Lunch 11am–2pm</span>
+      <div class="clock-card">
+        <span>Current Time</span>
         <strong id="currentTime">--:--</strong>
       </div>
     </header>
 
     <section id="statusBar" class="status-bar">Ready.</section>
 
-    <section class="layout">
-      <section class="left-column">
+    <section class="main-grid">
+      <aside class="left-panel">
         <article class="scoreboard">
-          <div class="scoreboard-title">
+          <div class="scoreboard-heading">
             <h2>CSS / Car Count</h2>
-            <span>Total starts after order</span>
+            <p>Completed cars only</p>
           </div>
 
           <div class="score-row">
-            <div class="score-name">Lane 1 Order <span class="goal">(0:30)</span></div>
+            <div class="score-name">Order 1 <span class="goal">(0:30)</span></div>
             <div class="score-time" id="order1Avg">0:00</div>
             <div class="score-percent" id="order1Pct">0%</div>
           </div>
 
           <div class="score-row">
-            <div class="score-name">Lane 2 Order <span class="goal">(0:30)</span></div>
+            <div class="score-name">Order 2 <span class="goal">(0:30)</span></div>
             <div class="score-time" id="order2Avg">0:00</div>
             <div class="score-percent" id="order2Pct">0%</div>
           </div>
 
           <div class="score-row">
-            <div class="score-name">Cash <span class="goal">(0:20)</span></div>
+            <div class="score-name">Cash <span class="goal">(0:30)</span></div>
             <div class="score-time" id="cashAvg">0:00</div>
             <div class="score-percent" id="cashPct">0%</div>
           </div>
 
           <div class="score-row">
-            <div class="score-name">Present <span class="goal">(0:20)</span></div>
+            <div class="score-name">Present <span class="goal">(0:30)</span></div>
             <div class="score-time" id="presentAvg">0:00</div>
             <div class="score-percent" id="presentPct">0%</div>
           </div>
 
           <div class="score-row total-row">
-            <div class="score-name">Total <span class="goal">(2:50)</span></div>
+            <div class="score-name">Total <span class="goal">(1:00)</span></div>
             <div class="score-time" id="totalAvg">0:00</div>
             <div class="score-percent" id="totalPct">0%</div>
           </div>
@@ -63,136 +63,83 @@
 
         <article class="control-card">
           <h3>Controls</h3>
-          <div class="button-grid">
-            <button id="addLane1Btn">Add Car Lane 1</button>
-            <button id="addLane2Btn">Add Car Lane 2</button>
-            <button id="completeOrder1Btn">Complete Lane 1 Order</button>
-            <button id="completeOrder2Btn">Complete Lane 2 Order</button>
-            <button id="completeCashBtn">Complete Cash</button>
-            <button id="completePresentBtn">Complete Present</button>
+          <div class="control-grid">
+            <button id="addLane1Btn" class="primary">Add Car Lane 1</button>
+            <button id="addLane2Btn" class="primary alt">Add Car Lane 2</button>
+            <button id="releaseOrder1Btn" class="service">Complete Order 1</button>
+            <button id="releaseOrder2Btn" class="service">Complete Order 2</button>
+            <button id="releaseCashBtn" class="cash">Complete Cash</button>
+            <button id="releasePresentBtn" class="present">Complete Present</button>
             <button id="resetBtn" class="danger">Reset Day</button>
           </div>
-          <p class="hint">Keyboard shortcuts: <strong>1</strong> add Lane 1, <strong>2</strong> add Lane 2, <strong>Q</strong> complete Lane 1 order, <strong>W</strong> complete Lane 2 order, <strong>C</strong> complete cash, <strong>P</strong> complete present.</p>
+          <p class="hint">Shortcuts: <strong>1</strong> add Lane 1, <strong>2</strong> add Lane 2, <strong>Q</strong> Order 1, <strong>W</strong> Order 2, <strong>C</strong> Cash, <strong>P</strong> Present.</p>
         </article>
 
-        <article class="settings-card">
-          <h3>Target Times</h3>
-          <div class="settings-grid">
-            <label>Lane 1 Order <input id="targetOrder1" type="number" min="1" value="30"> sec</label>
-            <label>Lane 2 Order <input id="targetOrder2" type="number" min="1" value="30"> sec</label>
-            <label>Cash <input id="targetCash" type="number" min="1" value="20"> sec</label>
-            <label>Present <input id="targetPresent" type="number" min="1" value="20"> sec</label>
-            <label>Total <input id="targetTotal" type="number" min="1" value="170"> sec</label>
+        <article class="mini-card">
+          <h3>Active Cars</h3>
+          <div class="active-summary">
+            <div><span>In drive thru</span><strong id="activeCount">0</strong></div>
+            <div><span>Completed</span><strong id="completedCount">0</strong></div>
+            <div><span>Longest active total</span><strong id="longestActiveTotal">0:00</strong></div>
           </div>
         </article>
+      </aside>
+
+      <section class="map-panel">
+        <div class="map-header">
+          <div>
+            <h2>Map View</h2>
+            <p>Lane 1 has one gap between Order 1 and Cash. Lane 2 has two gaps between Order 2 and Cash. Cash has one gap before Present.</p>
+          </div>
+          <div class="legend">
+            <span><i class="legend-car green"></i>Under 1:00</span>
+            <span><i class="legend-car yellow"></i>1:00+</span>
+            <span><i class="legend-car red"></i>1:30+</span>
+          </div>
+        </div>
+
+        <div class="drive-map" id="driveMap" aria-label="Drive thru map view">
+          <svg class="track-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path class="track lane1-track" d="M 8 62 L 21 62 L 34 62 L 50 62 L 66 52 L 78 52 L 92 52" />
+            <path class="track lane2-track" d="M 8 82 L 21 82 L 34 82 L 42 74 L 50 66 L 66 52 L 78 52 L 92 52" />
+            <path class="track-shadow" d="M 66 52 L 78 52 L 92 52" />
+          </svg>
+
+          <div class="map-label lane1-label" style="left: 7%; top: 52%;">Lane 1 / inner lane</div>
+          <div class="map-label lane2-label" style="left: 7%; top: 88%;">Lane 2 / outer lane</div>
+
+          <div id="positionLabels"></div>
+          <div id="carsLayer" class="cars-layer"></div>
+        </div>
       </section>
+    </section>
 
-      <section class="right-column">
-        <section class="lane-display" aria-label="Two lane drive thru map">
-          <div class="lane-heading lane-1-heading">
-            <strong>Lane 1</strong>
-            <span id="lane1OrderLive">Order 0:00</span>
-          </div>
-          <div class="lane-heading lane-2-heading">
-            <strong>Lane 2</strong>
-            <span id="lane2OrderLive">Order 0:00</span>
-          </div>
-
-          <div class="lane-row lane-one">
-            <div class="space spawn">
-              <span>2 spaces before speaker</span>
-              <div class="slot" id="slot-l1-pre2"></div>
-            </div>
-            <div class="space">
-              <span>1 space before speaker</span>
-              <div class="slot" id="slot-l1-pre1"></div>
-            </div>
-            <div class="space speaker">
-              <span>Speaker Box / Order 1</span>
-              <div class="slot" id="slot-l1-order"></div>
-            </div>
-          </div>
-
-          <div class="lane-row lane-two">
-            <div class="space spawn">
-              <span>2 spaces before speaker</span>
-              <div class="slot" id="slot-l2-pre2"></div>
-            </div>
-            <div class="space">
-              <span>1 space before speaker</span>
-              <div class="slot" id="slot-l2-pre1"></div>
-            </div>
-            <div class="space speaker">
-              <span>Speaker Box / Order 2</span>
-              <div class="slot" id="slot-l2-order"></div>
-            </div>
-          </div>
-
-          <div class="merge-label">After order, cars join the shared cash/present lane. Total time starts here.</div>
-
-          <div class="shared-lane">
-            <div class="space merge-space">
-              <span>After Order Space 2</span>
-              <div class="slot" id="slot-after-order-2"></div>
-            </div>
-            <div class="space merge-space">
-              <span>After Order Space 1</span>
-              <div class="slot" id="slot-after-order-1"></div>
-            </div>
-            <div class="space cash-space">
-              <span>Cash</span>
-              <div class="slot" id="slot-cash"></div>
-            </div>
-            <div class="space present-space">
-              <span>Present</span>
-              <div class="slot" id="slot-present"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="summary-grid">
-          <article>
-            <span>Cars in Lane</span>
-            <strong id="carsInLane">0</strong>
-          </article>
-          <article>
-            <span>Lane 1 Active</span>
-            <strong id="lane1Active">0</strong>
-          </article>
-          <article>
-            <span>Lane 2 Active</span>
-            <strong id="lane2Active">0</strong>
-          </article>
-          <article>
-            <span>Longest Total</span>
-            <strong id="longestTotal">0:00</strong>
-          </article>
-        </section>
-
-        <article class="history-card">
-          <h3>Completed Cars</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Car</th>
-                  <th>Lane</th>
-                  <th>Order</th>
-                  <th>Cash</th>
-                  <th>Present</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody id="historyBody">
-                <tr><td colspan="6" class="empty">No completed cars yet.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </section>
+    <section class="history-card">
+      <div class="history-heading">
+        <h2>Completed Cars</h2>
+        <p>The left-side averages and percentages update only when a car leaves Present.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Car</th>
+              <th>Lane</th>
+              <th>Order</th>
+              <th>Cash</th>
+              <th>Present</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr><td colspan="6" class="empty">No completed cars yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
+  <script src="simulation.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
