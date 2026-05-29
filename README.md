@@ -80,3 +80,16 @@ This version embeds the audio files directly into `app.js` and uses the Web Audi
 - Added Fullscreen Mode showing the results on the left and the drive-thru map on the right.
 - Changed the board heading to `Car Count` and added a completed car counter.
 - Kept the embedded image and audio fixes so the car assets and sounds work more reliably.
+
+
+## Latest requested changes in this version
+
+- Present target changed to 1:00.
+- Total-time colour and sound thresholds changed to yellow at 1:30 and red at 2:00.
+- The live total-time display now uses the same colour as the car status.
+- Lane merge artwork refined to look smoother with less overlap.
+- Labels moved outside the lanes.
+- Car positions adjusted to sit in the middle of the lanes, with Lane 2 merge cars angled to match the curve.
+- Fullscreen map positions improved by using a responsive aspect-ratio layout.
+- Cars now advance one space at a time with a one-second stagger after a completed car leaves the drive thru.
+- Reset Day now resets the simulator immediately without relying on a page reload.

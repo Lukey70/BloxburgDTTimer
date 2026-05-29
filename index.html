@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">Drive Thru Timer</p>
         <h1>Two Lane Map View</h1>
-        <p class="subtext">Two lanes run up the right side and merge smoothly across the top to the left. Cars move one space per second when the space ahead is clear. Order, Cash and Present only release when their button is pressed.</p>
+        <p class="subtext">Two lanes run up the right side and merge smoothly into the shared lane across the top. Cars move one space per second, station timers keep counting until a car physically leaves a section, and the live total time colour matches the longest waiting car.</p>
       </div>
       <div class="header-tools">
         <div class="clock-card">
@@ -64,7 +64,7 @@
             <div class="pct" id="pctCash">0%</div>
           </div>
           <div class="score-row">
-            <div class="name">Present <span class="goal" id="goalPresent">0:30</span></div>
+            <div class="name">Present <span class="goal" id="goalPresent">1:00</span></div>
             <div class="avg" id="avgPresent">0:00</div>
             <div class="pct" id="pctPresent">0%</div>
           </div>
@@ -86,7 +86,7 @@
             <button id="btnReleasePresent" class="info">Present Complete</button>
             <button id="btnReset" class="danger">Reset Day</button>
           </div>
-          <p class="hint">Keyboard shortcuts: 1 = Add Lane 1, 2 = Add Lane 2, Q = Order 1 complete, W = Order 2 complete, C = Cash complete, P = Present complete.</p>
+          <p class="hint">Keyboard shortcuts: 1 = Add Lane 1, 2 = Add Lane 2, Q = Order 1 complete, W = Order 2 complete, C = Cash complete, P = Present complete, F = Fullscreen.</p>
         </article>
 
         <article class="history-card">
@@ -118,15 +118,15 @@
         <article class="map-panel">
           <div class="map-frame">
             <svg class="lane-svg" viewBox="0 0 920 710" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <g class="lane-glow">
-                <path d="M 130 85 H 720" />
-                <path d="M 690 510 V 90" />
-                <path d="M 806 510 V 240 Q 806 145 720 85" />
+              <g class="lane-outline">
+                <path d="M 130 84 H 725" />
+                <path d="M 688 510 V 86" />
+                <path d="M 804 510 V 250 C 804 190 790 140 725 84" />
               </g>
               <g class="lane-road">
-                <path d="M 130 85 H 720" />
-                <path d="M 690 510 V 90" />
-                <path d="M 806 510 V 240 Q 806 145 720 85" />
+                <path d="M 130 84 H 725" />
+                <path d="M 688 510 V 86" />
+                <path d="M 804 510 V 250 C 804 190 790 140 725 84" />
               </g>
             </svg>
 
@@ -154,7 +154,7 @@
               <strong id="carsInLane">0</strong>
               <div class="summary-divider"></div>
               <span>Total Time</span>
-              <strong id="longestWait">0:00</strong>
+              <strong id="longestWait" class="status-green">0:00</strong>
               <em>Longest waiting car</em>
             </div>
           </div>

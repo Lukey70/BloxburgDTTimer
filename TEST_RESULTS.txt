@@ -1,26 +1,29 @@
 JavaScript syntax check for simulation.mjs: PASS
 JavaScript syntax check for app.js: PASS
 Simulation logic tests in tests.mjs: PASS
-Heading changed to Car Count: PASS
-Completed car counter present: PASS
-Fullscreen button present: PASS
-Fullscreen JS present: PASS
-Gap labels hidden/removed: PASS
-Smooth merge SVG present: PASS
-Solid map background only: PASS
-Embedded car images still present: PASS
-Embedded sound data still present: PASS
-Web Audio API sound playback retained: PASS
+Present target updated to 1:00: PASS
+Total thresholds updated to yellow at 1:30 and red at 2:00: PASS
+Live total time colour follows car status: PASS
+Lane 2 merge car is angled: PASS
+Labels moved outside lanes: PASS
+Map background is solid colour with no square grid: PASS
+Gap labels hidden: PASS
+Responsive fullscreen positioning present: PASS
+Reset Day fixed without reload dependency: PASS
+Embedded car assets retained: PASS
+Embedded sound data retained: PASS
+Web Audio playback retained: PASS
 
 Covered behaviours:
 - Lane 1 and Lane 2 spawn positions
 - Two spaces before each speaker
-- One space per second movement
+- One-space-per-second movement with staggered advances after completion
 - Total time starts only after the car physically leaves order
 - Blocked section timers keep counting until the car actually leaves
 - Lane 1 has one gap to cash and Lane 2 has two gaps to cash in the movement logic
 - One gap between cash and present in the movement logic
 - Merge priority uses first completed order
-- Completed cars only update averages and percentages
-- Fullscreen mode shows the results board on the left and drive-thru map on the right
-- Embedded car assets and embedded sounds are retained
+- Present target is 1:00 and total target remains 1:00 for scoreboard percentages
+- Yellow and red total-time thresholds are now 1:30 and 2:00 for car colour, live total colour, and sounds
+- Fullscreen mode keeps the results board on the left and drive-thru map on the right
+- Reset Day clears the simulator immediately without a page reload

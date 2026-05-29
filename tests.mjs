@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { DriveThruSimulator, computeScoreboard } from './simulation.mjs';
+import { DriveThruSimulator, computeScoreboard, TARGETS } from './simulation.mjs';
 
 function runTicks(sim, seconds) {
   for (let i = 0; i < seconds; i += 1) sim.tick(1);
@@ -15,19 +15,24 @@ function completeSingleLane1Car(sim, opts = {}) {
   moveLane1CarToOrder(sim);
   runTicks(sim, opts.orderTime ?? 5);
   sim.releaseStation('order1');
-  sim.tick(1); // move to 1 gap to cash, total starts here
-  runTicks(sim, opts.toCash ?? 1);
-  assert.equal(sim.carAt('cash')?.lane, 1, 'Lane 1 car should reach cash after one gap');
+  sim.tick(1); // order1 -> gap_cash1, total starts here
+  sim.tick(1); // gap_cash1 -> cash
+  assert.equal(sim.carAt('cash')?.lane, 1, 'Lane 1 car should reach cash after one extra second');
   runTicks(sim, opts.cashTime ?? 5);
   sim.releaseStation('cash');
-  sim.tick(1); // move to gap to present
-  runTicks(sim, 1);
-  assert.equal(sim.carAt('present')?.lane, 1, 'Car should reach present after one gap');
+  sim.tick(1); // cash -> gap_present1
+  sim.tick(1); // gap_present1 -> present
+  assert.equal(sim.carAt('present')?.lane, 1, 'Car should reach present after one extra second');
   runTicks(sim, opts.presentTime ?? 5);
   sim.releaseStation('present');
   sim.tick(1);
   assert.equal(sim.completedCars.length, 1, 'Car should complete after leaving present');
   return sim.completedCars[0];
+}
+
+function testTargetsUpdated() {
+  assert.equal(TARGETS.present, 60, 'Present target should be 60 seconds');
+  assert.equal(TARGETS.total, 60, 'Total target should remain 60 seconds');
 }
 
 function testSpawnAndMovement() {
@@ -54,14 +59,12 @@ function testTotalStartsAfterOrderLeaves() {
 
 function testBlockedOrderTimerContinues() {
   const sim = new DriveThruSimulator();
-  // Car A sits at cash and blocks the path onward.
   moveLane1CarToOrder(sim);
   sim.releaseStation('order1');
   sim.tick(1); // gap_cash1
   sim.tick(1); // cash
   assert.equal(sim.carAt('cash')?.lane, 1, 'Car A should be sitting at cash');
 
-  // Car B sits at gap_cash1 because cash is blocked.
   sim.addCar(2);
   runTicks(sim, 2);
   sim.releaseStation('order2');
@@ -69,7 +72,6 @@ function testBlockedOrderTimerContinues() {
   sim.tick(1); // gap_cash1
   assert.equal(sim.carAt('gap_cash1')?.lane, 2, 'Car B should be sitting at the shared 1-gap-to-cash');
 
-  // Car C reaches order1 and is released, but cannot move because gap_cash1 is occupied.
   sim.addCar(1);
   runTicks(sim, 2);
   const third = sim.carAt('order1');
@@ -81,10 +83,10 @@ function testBlockedOrderTimerContinues() {
   runTicks(sim, 3);
   assert.equal(sim.now - enteredAt >= 5, true, 'Order timer should continue while the car waits');
 
-  // Once cash is released and the chain clears, the waiting order car should finally move.
   sim.releaseStation('cash');
-  sim.tick(1); // the chain starts clearing
-  sim.tick(1); // by now the waiting order car must have moved out
+  sim.tick(1); // cash leaves to gap_present1
+  sim.tick(1); // gap_cash1 goes to cash
+  sim.tick(1); // waiting order car can finally move to gap_cash1
   const moved = sim.activeCars.find((car) => car.id === third.id);
   assert.notEqual(moved?.position, 'order1', 'Order car should move once the path clears');
   assert.ok(moved.totalStartedAt != null, 'Total should start when it actually moves out of order');
@@ -107,22 +109,18 @@ function testLane2HasTwoGapsToCash() {
 
 function testMergePriorityByFirstCompletedOrder() {
   const sim = new DriveThruSimulator();
-
-  // Car A reaches cash and blocks it.
   moveLane1CarToOrder(sim);
   sim.releaseStation('order1');
   sim.tick(1); // gap_cash1
   sim.tick(1); // cash
   assert.equal(sim.carAt('cash')?.lane, 1);
 
-  // Car B reaches the shared 1-gap-to-cash and waits because cash is blocked.
   sim.addCar(1);
   runTicks(sim, 2);
   sim.releaseStation('order1');
   sim.tick(1); // gap_cash1
   assert.equal(sim.carAt('gap_cash1')?.lane, 1);
 
-  // Car C (Lane 2) completes order first and waits at gap_cash2.
   sim.addCar(2);
   runTicks(sim, 2);
   sim.releaseStation('order2');
@@ -130,30 +128,64 @@ function testMergePriorityByFirstCompletedOrder() {
   const lane2Car = sim.carAt('gap_cash2');
   assert.equal(lane2Car?.lane, 2);
 
-  // Car D (Lane 1) completes order later and waits at order1.
   sim.addCar(1);
   runTicks(sim, 2);
   sim.releaseStation('order1');
   const lane1Waiting = sim.carAt('order1');
   assert.equal(lane1Waiting?.lane, 1);
 
-  // When cash is released, the shared gap opens. Car C should take it first because it completed order earlier.
   sim.releaseStation('cash');
-  sim.tick(1);
+  sim.tick(1); // cash -> gap_present1
+  sim.tick(1); // existing gap_cash1 car -> cash
+  sim.tick(1); // shared gap now free, earlier lane2 completed order should take it
   assert.equal(sim.carAt('gap_cash1')?.id, lane2Car.id, 'Earlier completed order should take the shared 1-gap-to-cash first');
+}
+
+function testSequentialAdvanceAfterCompletion() {
+  const sim = new DriveThruSimulator();
+  const baseCar = (id, lane, position, releaseRequested = false) => ({
+    id,
+    lane,
+    position,
+    positionEnteredAt: 0,
+    totalStartedAt: 0,
+    orderReleaseAt: 0,
+    releaseRequested,
+    thresholds: { yellow: false, red: false },
+    timings: { order1: null, order2: null, cash: null, present: null, total: null },
+    completedAt: null,
+  });
+
+  sim.activeCars = [
+    baseCar(1, 1, 'present', true),
+    baseCar(2, 1, 'gap_present1', false),
+    baseCar(3, 2, 'cash', true),
+  ];
+  sim.nextCarId = 4;
+
+  sim.tick(1);
+  assert.equal(sim.completedCars.length, 1, 'First car should leave the drive thru');
+  assert.equal(sim.carAt('gap_present1')?.id, 2, 'Immediately after completion, the next car should still wait in the same space');
+  assert.equal(sim.carAt('cash')?.id, 3, 'The following car should still wait in cash on the completion tick');
+
+  sim.tick(1);
+  assert.equal(sim.carAt('present')?.id, 2, 'One second later the next car should move up one space');
+  assert.equal(sim.carAt('cash')?.id, 3, 'The following car should still wait one more second');
+
+  sim.tick(1);
+  assert.equal(sim.carAt('gap_present1')?.id, 3, 'Another second later the following car should move up one space');
 }
 
 function testCompletedCarsOnlyAffectAverages() {
   const sim = new DriveThruSimulator();
-  const completed = completeSingleLane1Car(sim, { orderTime: 10, cashTime: 8, presentTime: 7 });
-  // Add another active car that should not affect averages.
+  const completed = completeSingleLane1Car(sim, { orderTime: 10, cashTime: 8, presentTime: 12 });
   sim.addCar(1);
   runTicks(sim, 2);
   const scoreboard = computeScoreboard(sim.completedCars);
   assert.equal(scoreboard.order1.avg, completed.timings.order1);
   assert.equal(scoreboard.cash.avg, completed.timings.cash);
   assert.equal(scoreboard.total.avg, completed.timings.total);
-  assert.equal(scoreboard.order1.pct, completed.timings.order1 <= 30 ? 100 : 0);
+  assert.equal(scoreboard.present.pct, completed.timings.present <= 60 ? 100 : 0, 'Present percentage should use the 60 second target');
 }
 
 function testThresholdEvents() {
@@ -163,23 +195,37 @@ function testThresholdEvents() {
   sim.tick(1); // total starts
   let sawYellow = false;
   let sawRed = false;
-  for (let i = 0; i < 95; i += 1) {
+  for (let i = 0; i < 125; i += 1) {
     const events = sim.tick(1);
     if (events.some((event) => event.type === 'yellow-threshold')) sawYellow = true;
     if (events.some((event) => event.type === 'red-threshold')) sawRed = true;
   }
-  assert.equal(sawYellow, true, 'Yellow threshold should trigger at 1 minute total');
-  assert.equal(sawRed, true, 'Red threshold should trigger at 1:30 total');
+  assert.equal(sawYellow, true, 'Yellow threshold should trigger at 1:30 total');
+  assert.equal(sawRed, true, 'Red threshold should trigger at 2:00 total');
+}
+
+function testResetMethod() {
+  const sim = new DriveThruSimulator();
+  sim.addCar(1);
+  runTicks(sim, 2);
+  sim.reset();
+  assert.equal(sim.activeCars.length, 0);
+  assert.equal(sim.completedCars.length, 0);
+  assert.equal(sim.now, 0);
+  assert.equal(sim.nextCarId, 1);
 }
 
 function runAll() {
+  testTargetsUpdated();
   testSpawnAndMovement();
   testTotalStartsAfterOrderLeaves();
   testBlockedOrderTimerContinues();
   testLane2HasTwoGapsToCash();
   testMergePriorityByFirstCompletedOrder();
+  testSequentialAdvanceAfterCompletion();
   testCompletedCarsOnlyAffectAverages();
   testThresholdEvents();
+  testResetMethod();
   console.log('All simulation tests passed.');
 }
 

@@ -2,8 +2,13 @@ export const TARGETS = {
   order1: 30,
   order2: 30,
   cash: 30,
-  present: 30,
+  present: 60,
   total: 60,
+};
+
+export const STATUS_THRESHOLDS = {
+  yellow: 90,
+  red: 120,
 };
 
 export const POSITION_META = {
@@ -32,6 +37,14 @@ export class DriveThruSimulator {
     if (savedState) {
       this.load(savedState);
     }
+  }
+
+  reset() {
+    this.now = 0;
+    this.nextCarId = 1;
+    this.activeCars = [];
+    this.completedCars = [];
+    this.statusMessage = 'Ready.';
   }
 
   serialize() {
@@ -129,11 +142,11 @@ export class DriveThruSimulator {
   processThresholds(events) {
     for (const car of this.activeCars) {
       const total = this.totalElapsed(car);
-      if (car.totalStartedAt != null && !car.thresholds.yellow && total >= 60) {
+      if (car.totalStartedAt != null && !car.thresholds.yellow && total >= STATUS_THRESHOLDS.yellow) {
         car.thresholds.yellow = true;
         events.push({ type: 'yellow-threshold', carId: car.id, lane: car.lane });
       }
-      if (car.totalStartedAt != null && !car.thresholds.red && total >= 90) {
+      if (car.totalStartedAt != null && !car.thresholds.red && total >= STATUS_THRESHOLDS.red) {
         car.thresholds.red = true;
         events.push({ type: 'red-threshold', carId: car.id, lane: car.lane });
       }
@@ -157,56 +170,38 @@ export class DriveThruSimulator {
   }
 
   processMovement(events) {
-    const plannedMoves = new Map(); // carId -> target
-    const reservedTargets = new Set();
-    const vacatingPositions = new Set();
-    const occupiedStart = new Map(this.activeCars.map((car) => [car.position, car]));
+    const occupiedStart = new Set(this.activeCars.map((car) => car.position));
+    const plannedMoves = [];
 
-    const targetIsAvailable = (target) => {
-      if (reservedTargets.has(target)) return false;
-      const occupant = occupiedStart.get(target);
-      if (!occupant) return true;
-      return plannedMoves.has(occupant.id);
-    };
+    const isEmptyAtStart = (position) => !occupiedStart.has(position);
+    const planMove = (car, target) => plannedMoves.push({ carId: car.id, from: car.position, to: target });
 
-    const planMove = (car, target) => {
-      plannedMoves.set(car.id, target);
-      reservedTargets.add(target);
-      vacatingPositions.add(car.position);
-    };
-
-    // Front-most sections.
     const presentCar = this.carAt('present');
     if (presentCar && this.canMoveFrom('present')) {
       planMove(presentCar, 'exit');
     }
 
     const gapPresentCar = this.carAt('gap_present1');
-    if (gapPresentCar && this.canMoveFrom('gap_present1') && targetIsAvailable('present')) {
+    if (gapPresentCar && this.canMoveFrom('gap_present1') && isEmptyAtStart('present')) {
       planMove(gapPresentCar, 'present');
     }
 
     const cashCar = this.carAt('cash');
-    if (cashCar && this.canMoveFrom('cash') && targetIsAvailable('gap_present1')) {
+    if (cashCar && this.canMoveFrom('cash') && isEmptyAtStart('gap_present1')) {
       planMove(cashCar, 'gap_present1');
     }
 
     const gapCash1Car = this.carAt('gap_cash1');
-    if (gapCash1Car && this.canMoveFrom('gap_cash1') && targetIsAvailable('cash')) {
+    if (gapCash1Car && this.canMoveFrom('gap_cash1') && isEmptyAtStart('cash')) {
       planMove(gapCash1Car, 'cash');
     }
 
-    // Competition for shared gap to cash.
     const contenders = [];
     const gapCash2Car = this.carAt('gap_cash2');
-    if (gapCash2Car && this.canMoveFrom('gap_cash2')) {
-      contenders.push(gapCash2Car);
-    }
+    if (gapCash2Car && this.canMoveFrom('gap_cash2')) contenders.push(gapCash2Car);
     const order1Car = this.carAt('order1');
-    if (order1Car && this.canMoveFrom('order1')) {
-      contenders.push(order1Car);
-    }
-    if (contenders.length && targetIsAvailable('gap_cash1')) {
+    if (order1Car && this.canMoveFrom('order1')) contenders.push(order1Car);
+    if (contenders.length && isEmptyAtStart('gap_cash1')) {
       contenders.sort((a, b) => {
         const aPriority = a.orderReleaseAt ?? this.now;
         const bPriority = b.orderReleaseAt ?? this.now;
@@ -217,34 +212,35 @@ export class DriveThruSimulator {
     }
 
     const order2Car = this.carAt('order2');
-    if (order2Car && this.canMoveFrom('order2') && targetIsAvailable('gap_cash2')) {
+    if (order2Car && this.canMoveFrom('order2') && isEmptyAtStart('gap_cash2')) {
       planMove(order2Car, 'gap_cash2');
     }
 
     const lane1Pre1 = this.carAt('lane1_pre1');
-    if (lane1Pre1 && this.canMoveFrom('lane1_pre1') && targetIsAvailable('order1')) {
+    if (lane1Pre1 && this.canMoveFrom('lane1_pre1') && isEmptyAtStart('order1')) {
       planMove(lane1Pre1, 'order1');
     }
     const lane1Pre2 = this.carAt('lane1_pre2');
-    if (lane1Pre2 && this.canMoveFrom('lane1_pre2') && targetIsAvailable('lane1_pre1')) {
+    if (lane1Pre2 && this.canMoveFrom('lane1_pre2') && isEmptyAtStart('lane1_pre1')) {
       planMove(lane1Pre2, 'lane1_pre1');
     }
 
     const lane2Pre1 = this.carAt('lane2_pre1');
-    if (lane2Pre1 && this.canMoveFrom('lane2_pre1') && targetIsAvailable('order2')) {
+    if (lane2Pre1 && this.canMoveFrom('lane2_pre1') && isEmptyAtStart('order2')) {
       planMove(lane2Pre1, 'order2');
     }
     const lane2Pre2 = this.carAt('lane2_pre2');
-    if (lane2Pre2 && this.canMoveFrom('lane2_pre2') && targetIsAvailable('lane2_pre1')) {
+    if (lane2Pre2 && this.canMoveFrom('lane2_pre2') && isEmptyAtStart('lane2_pre1')) {
       planMove(lane2Pre2, 'lane2_pre1');
     }
 
-    if (!plannedMoves.size) return;
+    if (!plannedMoves.length) return;
 
-    for (const car of [...this.activeCars]) {
-      const target = plannedMoves.get(car.id);
-      if (!target) continue;
-      const previous = car.position;
+    for (const move of plannedMoves) {
+      const car = this.activeCars.find((active) => active.id === move.carId);
+      if (!car) continue;
+      const previous = move.from;
+      const target = move.to;
       const previousMeta = POSITION_META[previous];
 
       if (previousMeta.station) {
@@ -257,11 +253,7 @@ export class DriveThruSimulator {
       }
 
       if (target === 'exit') {
-        if (car.totalStartedAt != null) {
-          car.timings.total = this.now - car.totalStartedAt;
-        } else {
-          car.timings.total = 0;
-        }
+        car.timings.total = car.totalStartedAt != null ? this.now - car.totalStartedAt : 0;
         car.completedAt = this.now;
         this.completedCars.unshift({ ...car });
         this.activeCars = this.activeCars.filter((active) => active.id !== car.id);
@@ -270,7 +262,6 @@ export class DriveThruSimulator {
       } else {
         car.position = target;
         car.positionEnteredAt = this.now;
-        // carry ordering completion priority until cash reached
         if (previous === 'order1' || previous === 'order2') {
           car.orderReleaseAt = this.now;
         }
