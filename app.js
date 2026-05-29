@@ -310,17 +310,17 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 const MAP_SIZE = { width: 920, height: 710 };
 
 const POSITION_UI = {
-  present: { x: 210, y: 112, rotation: 180 },
-  gap_present1: { x: 322, y: 112, rotation: 180 },
-  cash: { x: 434, y: 112, rotation: 180 },
-  gap_cash1: { x: 546, y: 112, rotation: 180 },
-  gap_cash2: { x: 690, y: 182, rotation: -128 },
+  present: { x: 178, y: 112, rotation: 180 },
+  gap_present1: { x: 302, y: 112, rotation: 180 },
+  cash: { x: 426, y: 112, rotation: 180 },
+  gap_cash1: { x: 550, y: 112, rotation: 180 },
+  gap_cash2: { x: 708, y: 182, rotation: -132 },
   order1: { x: 646, y: 270, rotation: -90 },
   order2: { x: 758, y: 262, rotation: -90 },
-  lane1_pre1: { x: 646, y: 350, rotation: -90 },
-  lane1_pre2: { x: 646, y: 430, rotation: -90 },
-  lane2_pre1: { x: 758, y: 350, rotation: -90 },
-  lane2_pre2: { x: 758, y: 430, rotation: -90 },
+  lane1_pre1: { x: 646, y: 385, rotation: -90 },
+  lane1_pre2: { x: 646, y: 500, rotation: -90 },
+  lane2_pre1: { x: 758, y: 385, rotation: -90 },
+  lane2_pre2: { x: 758, y: 500, rotation: -90 },
 };
 
 const simulator = new DriveThruSimulator(loadState());

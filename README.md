@@ -102,3 +102,12 @@ This version embeds the audio files directly into `app.js` and uses the Web Audi
 - Corrected the Lane 2 merge car to angle left into the shared lane.
 - Repositioned labels so Order 1 sits to the left of the Order 1 car, Order 2 sits to the right of the Order 2 car, and Cash/Present sit underneath their cars.
 - Added ready-to-move tick indicators for Order 1, Order 2, and Cash after their buttons are pressed.
+
+
+## Latest lane-position fixes
+
+- Extended the visual entry lane so spawned cars sit fully inside the lane and are not touching each other.
+- Extended the present/end lane so the car at Present sits inside the lane more cleanly.
+- Re-centred the Lane 2 merge car on the curve while keeping it angled left into the shared lane.
+- Moved Order 1 and Order 2 labels closer to the drive-thru, but still outside the lane.
+- Moved the live Cars in Lane / Total Time panel left so it sits outside the drive-thru lane.

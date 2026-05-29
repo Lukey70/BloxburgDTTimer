@@ -1,23 +1,22 @@
 JavaScript syntax check for simulation.mjs: PASS
 JavaScript syntax check for app.js: PASS
 Simulation logic tests in tests.mjs: PASS
-Lane 2 merge car now angles left: PASS
-Ready-to-move tick indicators added for Order 1, Order 2 and Cash: PASS
-Order 1 label positioned to the left of the ordering car: PASS
-Order 2 label positioned to the right of the ordering car: PASS
-Cash label positioned underneath the cash car: PASS
-Present label positioned underneath the present car: PASS
-Compact drive-thru map applied: PASS
-Cars resized and recalibrated for compact map: PASS
+Longer drive-thru entry applied: PASS
+Longer present/end lane applied: PASS
+Spawn cars recalibrated so they are further apart and inside the lane: PASS
+Lane 2 merge car centred better on the curve and angled left: PASS
+Order 1 label moved right closer to the lane but outside it: PASS
+Order 2 label moved right closer to the lane but outside it: PASS
+Live Cars in Lane / Total Time panel moved left outside the lane: PASS
+Ready-to-move tick indicators retained: PASS
 Fullscreen layout retained: PASS
 Embedded car assets retained: PASS
 Embedded sound data retained: PASS
 Web Audio playback retained: PASS
 
 Covered latest requested changes:
-- Compact physical spacing while keeping the same logical gap and timing rules
-- Lane 2 merge car angled left into the shared lane
-- Order 1 label left of the car, Order 2 label right of the car
-- Cash and Present labels underneath their cars
-- Ready-to-move ticks shown for Order 1, Order 2, and Cash after the station button is pressed
-- Embedded car image assets and embedded sounds remain included
+- Longer visual entry so spawned cars sit inside the lane and are not touching each other
+- Longer visual end/present lane so the present car sits inside the lane better
+- Lane 2 merge car centred better on the corner while still facing left
+- Order 1 and Order 2 labels moved closer to the drive-thru but kept outside the lane
+- Live Cars in Lane / Total Time panel moved left so it no longer sits inside the lane
