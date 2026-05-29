@@ -1,0 +1,420 @@
+:root {
+  --bg: #06142d;
+  --panel: #17285b;
+  --panel-2: #1b316d;
+  --lane: #117bb2;
+  --lane-edge: #1fd2ff;
+  --text: #f7fbff;
+  --muted: #a8badb;
+  --green: #57df42;
+  --orange: #ff9d16;
+  --red: #ff252d;
+  --border: rgba(255, 255, 255, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top, #1b2d65, var(--bg) 60%);
+}
+
+.shell {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 4rem);
+  letter-spacing: 1px;
+}
+
+.topbar p {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.clock-card {
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  text-align: right;
+  min-width: 240px;
+}
+
+.clock-card span {
+  display: block;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.clock-card strong {
+  font-size: 2rem;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 22px;
+}
+
+.left-panel,
+.lane-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mini-timers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.mini-card {
+  border-radius: 18px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+}
+
+.mini-card span {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.mini-card strong {
+  color: var(--green);
+  font-size: 2.25rem;
+}
+
+.scoreboard {
+  border: 7px solid var(--lane-edge);
+  box-shadow: 0 0 0 6px rgba(17, 123, 178, 0.6), inset 0 0 24px rgba(0,0,0,0.28);
+  border-radius: 42px;
+  background: rgba(23, 40, 91, 0.92);
+  padding: clamp(22px, 4vw, 48px);
+}
+
+.scoreboard h2 {
+  font-size: clamp(2rem, 4vw, 4.3rem);
+  margin-bottom: 28px;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.35);
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 1.6fr 0.8fr 0.7fr;
+  gap: 16px;
+  align-items: baseline;
+  margin: 18px 0;
+}
+
+.score-name {
+  font-size: clamp(1.8rem, 3vw, 3.9rem);
+  font-weight: 800;
+}
+
+.goal {
+  color: var(--green);
+  font-size: 0.45em;
+  vertical-align: middle;
+}
+
+.score-time {
+  color: var(--orange);
+  font-size: clamp(2rem, 4vw, 4.6rem);
+  font-weight: 900;
+  text-align: right;
+}
+
+.score-percent {
+  color: var(--red);
+  font-size: clamp(1.8rem, 3.5vw, 4.2rem);
+  font-weight: 900;
+  text-align: right;
+}
+
+.total {
+  margin-top: 28px;
+}
+
+.controls,
+.settings-card,
+.history-card,
+.lane-summary {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+button {
+  appearance: none;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #06142d;
+  background: var(--green);
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
+}
+
+.settings-card h3,
+.history-card h3 {
+  margin-bottom: 12px;
+  font-size: 1.35rem;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+label {
+  color: var(--muted);
+}
+
+input {
+  width: 84px;
+  margin: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  font-weight: 800;
+}
+
+.hint {
+  color: var(--muted);
+  margin-top: 12px;
+  line-height: 1.45;
+}
+
+.drive-lane {
+  position: relative;
+  min-height: 560px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  background:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+    rgba(23, 40, 91, 0.72);
+  background-size: 34px 34px;
+}
+
+.lane-segment {
+  position: absolute;
+  background: var(--lane);
+  box-shadow: 0 0 0 7px rgba(31,210,255,0.18);
+}
+
+.lane-top {
+  left: 8%;
+  right: 13%;
+  top: 42px;
+  height: 58px;
+  border-radius: 28px 90px 90px 28px;
+}
+
+.lane-right {
+  right: 8%;
+  top: 44px;
+  bottom: 160px;
+  width: 72px;
+  border-radius: 0 85px 0 0;
+}
+
+.lane-bottom {
+  left: 19%;
+  right: 11%;
+  bottom: 148px;
+  height: 58px;
+  border-radius: 90px 0 0 90px;
+}
+
+.station {
+  position: absolute;
+  color: var(--text);
+  font-weight: 800;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.42);
+  font-size: 1.15rem;
+}
+
+.station span {
+  color: var(--green);
+  font-size: 1.6rem;
+}
+
+.station-order1 { right: 32%; bottom: 232px; }
+.station-order2 { right: 4%; top: 205px; }
+.station-cash { right: 49%; top: 125px; }
+.station-present { left: 10%; top: 125px; }
+
+.cars-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.car {
+  position: absolute;
+  width: 44px;
+  height: 22px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #58d63e, #89ed65);
+  box-shadow: inset 0 0 0 4px rgba(17, 123, 178, 0.5), 0 5px 12px rgba(0,0,0,0.25);
+}
+
+.car::before,
+.car::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  width: 8px;
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(24, 63, 150, 0.65);
+}
+
+.car::before { left: 10px; }
+.car::after { right: 10px; }
+
+.car.vertical {
+  transform: rotate(90deg);
+}
+
+.lane-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.lane-summary span {
+  display: block;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.lane-summary strong {
+  display: block;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.1;
+}
+
+#carsInLane {
+  color: var(--text);
+}
+
+#currentLaneTime {
+  color: var(--green);
+}
+
+.history-table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+
+th, td {
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 1050px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    padding: 14px;
+  }
+
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .clock-card {
+    text-align: left;
+  }
+
+  .mini-timers,
+  .settings-grid,
+  .lane-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .score-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    margin: 24px 0;
+  }
+
+  .score-time,
+  .score-percent {
+    text-align: left;
+  }
+
+  .drive-lane {
+    min-height: 420px;
+  }
+}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drive Thru Timer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1>Drive Thru Timer</h1>
+        <p>Live lane timer dashboard</p>
+      </div>
+      <div class="clock-card">
+        <span id="modeLabel">Lunch 11am–2pm</span>
+        <strong id="currentTime">--:--</strong>
+      </div>
+    </header>
+
+    <section class="dashboard">
+      <section class="left-panel">
+        <div class="mini-timers">
+          <article class="mini-card">
+            <span>Pull Forward</span>
+            <strong id="pullForwardMini">0:00</strong>
+          </article>
+          <article class="mini-card">
+            <span>Present</span>
+            <strong id="presentMini">0:00</strong>
+          </article>
+          <article class="mini-card">
+            <span>Cash</span>
+            <strong id="cashMini">0:00</strong>
+          </article>
+        </div>
+
+        <article class="scoreboard">
+          <h2>CSS / Car Count</h2>
+
+          <div class="score-row">
+            <div class="score-name">Order-1 <span class="goal">(0:30)</span></div>
+            <div class="score-time" id="order1Avg">0:00</div>
+            <div class="score-percent" id="order1Pct">0%</div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-name">Order-2 <span class="goal">(0:30)</span></div>
+            <div class="score-time" id="order2Avg">0:00</div>
+            <div class="score-percent" id="order2Pct">0%</div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-name">Cash <span class="goal">(0:20)</span></div>
+            <div class="score-time" id="cashAvg">0:00</div>
+            <div class="score-percent" id="cashPct">0%</div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-name">Present <span class="goal">(0:20)</span></div>
+            <div class="score-time" id="presentAvg">0:00</div>
+            <div class="score-percent" id="presentPct">0%</div>
+          </div>
+
+          <div class="score-row total">
+            <div class="score-name">Total <span class="goal">(2:50)</span></div>
+            <div class="score-time" id="totalAvg">0:00</div>
+            <div class="score-percent" id="totalPct">0%</div>
+          </div>
+        </article>
+
+        <section class="controls">
+          <button id="addCarBtn">Add Car</button>
+          <button id="moveCarBtn">Move Next Car</button>
+          <button id="pullForwardBtn">Pull Forward</button>
+          <button id="resetBtn" class="ghost">Reset Day</button>
+        </section>
+
+        <section class="settings-card">
+          <h3>Target Times</h3>
+          <div class="settings-grid">
+            <label>Order 1 <input id="targetOrder1" type="number" min="1" value="30" /> sec</label>
+            <label>Order 2 <input id="targetOrder2" type="number" min="1" value="30" /> sec</label>
+            <label>Cash <input id="targetCash" type="number" min="1" value="20" /> sec</label>
+            <label>Present <input id="targetPresent" type="number" min="1" value="20" /> sec</label>
+            <label>Total <input id="targetTotal" type="number" min="1" value="170" /> sec</label>
+          </div>
+          <p class="hint">The demo uses manual buttons. Later you can connect real loop sensors, cameras, or a backend API.</p>
+        </section>
+      </section>
+
+      <section class="lane-panel">
+        <div class="drive-lane" aria-label="Drive thru lane">
+          <div class="lane-segment lane-top"></div>
+          <div class="lane-segment lane-right"></div>
+          <div class="lane-segment lane-bottom"></div>
+
+          <div class="station station-order1">Order-1<br><span id="liveOrder1">0:00</span></div>
+          <div class="station station-order2">Order-2<br><span id="liveOrder2">0:00</span></div>
+          <div class="station station-cash">Cash<br><span id="liveCash">0:00</span></div>
+          <div class="station station-present">Present<br><span id="livePresent">0:00</span></div>
+
+          <div id="carsLayer" class="cars-layer"></div>
+        </div>
+
+        <article class="lane-summary">
+          <div>
+            <span>Cars in Lane</span>
+            <strong id="carsInLane">0</strong>
+          </div>
+          <div>
+            <span>Total Time</span>
+            <strong id="currentLaneTime">0:00</strong>
+          </div>
+        </article>
+
+        <article class="history-card">
+          <h3>Completed Cars</h3>
+          <div class="history-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Car</th>
+                  <th>Order 1</th>
+                  <th>Order 2</th>
+                  <th>Cash</th>
+                  <th>Present</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <tr><td colspan="6" class="empty">No completed cars yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
