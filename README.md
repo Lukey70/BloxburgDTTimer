@@ -93,3 +93,12 @@ This version embeds the audio files directly into `app.js` and uses the Web Audi
 - Fullscreen map positions improved by using a responsive aspect-ratio layout.
 - Cars now advance one space at a time with a one-second stagger after a completed car leaves the drive thru.
 - Reset Day now resets the simulator immediately without relying on a page reload.
+
+
+## Latest compact-map fixes
+
+- Compressed the physical spacing of the drive-thru map while keeping the same logical spaces and movement rules.
+- Repositioned cars so they remain centred in the adjusted lanes.
+- Corrected the Lane 2 merge car to angle left into the shared lane.
+- Repositioned labels so Order 1 sits to the left of the Order 1 car, Order 2 sits to the right of the Order 2 car, and Cash/Present sit underneath their cars.
+- Added ready-to-move tick indicators for Order 1, Order 2, and Cash after their buttons are pressed.

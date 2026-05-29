@@ -308,18 +308,19 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 
 const MAP_SIZE = { width: 920, height: 710 };
+
 const POSITION_UI = {
-  present: { x: 140, y: 84, rotation: 180 },
-  gap_present1: { x: 302, y: 84, rotation: 180 },
-  cash: { x: 458, y: 84, rotation: 180 },
-  gap_cash1: { x: 608, y: 84, rotation: 180 },
-  gap_cash2: { x: 784, y: 162, rotation: -58 },
-  order1: { x: 688, y: 278, rotation: -90 },
-  order2: { x: 804, y: 270, rotation: -90 },
-  lane1_pre1: { x: 688, y: 382, rotation: -90 },
-  lane1_pre2: { x: 688, y: 486, rotation: -90 },
-  lane2_pre1: { x: 804, y: 378, rotation: -90 },
-  lane2_pre2: { x: 804, y: 486, rotation: -90 },
+  present: { x: 210, y: 112, rotation: 180 },
+  gap_present1: { x: 322, y: 112, rotation: 180 },
+  cash: { x: 434, y: 112, rotation: 180 },
+  gap_cash1: { x: 546, y: 112, rotation: 180 },
+  gap_cash2: { x: 690, y: 182, rotation: -128 },
+  order1: { x: 646, y: 270, rotation: -90 },
+  order2: { x: 758, y: 262, rotation: -90 },
+  lane1_pre1: { x: 646, y: 350, rotation: -90 },
+  lane1_pre2: { x: 646, y: 430, rotation: -90 },
+  lane2_pre1: { x: 758, y: 350, rotation: -90 },
+  lane2_pre2: { x: 758, y: 430, rotation: -90 },
 };
 
 const simulator = new DriveThruSimulator(loadState());
@@ -526,6 +527,12 @@ function renderScoreboard() {
   }
 }
 
+function setReadyTick(selector, visible) {
+  const tick = $(selector);
+  if (!tick) return;
+  tick.classList.toggle('is-hidden', !visible);
+}
+
 function renderLiveSectionLabels() {
   const labels = {
     present: simulator.carAt('present'),
@@ -537,6 +544,9 @@ function renderLiveSectionLabels() {
   $('#labelCashTime').textContent = labels.cash ? formatTime(simulator.stationElapsed(labels.cash)) : '0:00';
   $('#labelOrder1Time').textContent = labels.order1 ? formatTime(simulator.stationElapsed(labels.order1)) : '0:00';
   $('#labelOrder2Time').textContent = labels.order2 ? formatTime(simulator.stationElapsed(labels.order2)) : '0:00';
+  setReadyTick('#tickCash', Boolean(labels.cash && labels.cash.releaseRequested));
+  setReadyTick('#tickOrder1', Boolean(labels.order1 && labels.order1.releaseRequested));
+  setReadyTick('#tickOrder2', Boolean(labels.order2 && labels.order2.releaseRequested));
 }
 
 

@@ -1,29 +1,23 @@
 JavaScript syntax check for simulation.mjs: PASS
 JavaScript syntax check for app.js: PASS
 Simulation logic tests in tests.mjs: PASS
-Present target updated to 1:00: PASS
-Total thresholds updated to yellow at 1:30 and red at 2:00: PASS
-Live total time colour follows car status: PASS
-Lane 2 merge car is angled: PASS
-Labels moved outside lanes: PASS
-Map background is solid colour with no square grid: PASS
-Gap labels hidden: PASS
-Responsive fullscreen positioning present: PASS
-Reset Day fixed without reload dependency: PASS
+Lane 2 merge car now angles left: PASS
+Ready-to-move tick indicators added for Order 1, Order 2 and Cash: PASS
+Order 1 label positioned to the left of the ordering car: PASS
+Order 2 label positioned to the right of the ordering car: PASS
+Cash label positioned underneath the cash car: PASS
+Present label positioned underneath the present car: PASS
+Compact drive-thru map applied: PASS
+Cars resized and recalibrated for compact map: PASS
+Fullscreen layout retained: PASS
 Embedded car assets retained: PASS
 Embedded sound data retained: PASS
 Web Audio playback retained: PASS
 
-Covered behaviours:
-- Lane 1 and Lane 2 spawn positions
-- Two spaces before each speaker
-- One-space-per-second movement with staggered advances after completion
-- Total time starts only after the car physically leaves order
-- Blocked section timers keep counting until the car actually leaves
-- Lane 1 has one gap to cash and Lane 2 has two gaps to cash in the movement logic
-- One gap between cash and present in the movement logic
-- Merge priority uses first completed order
-- Present target is 1:00 and total target remains 1:00 for scoreboard percentages
-- Yellow and red total-time thresholds are now 1:30 and 2:00 for car colour, live total colour, and sounds
-- Fullscreen mode keeps the results board on the left and drive-thru map on the right
-- Reset Day clears the simulator immediately without a page reload
+Covered latest requested changes:
+- Compact physical spacing while keeping the same logical gap and timing rules
+- Lane 2 merge car angled left into the shared lane
+- Order 1 label left of the car, Order 2 label right of the car
+- Cash and Present labels underneath their cars
+- Ready-to-move ticks shown for Order 1, Order 2, and Cash after the station button is pressed
+- Embedded car image assets and embedded sounds remain included

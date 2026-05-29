@@ -93,23 +93,23 @@ th { color: var(--muted); font-weight: 700; }
 .empty { text-align: center; color: var(--muted); }
 .map-panel { border-radius: 24px; padding: 14px; display: flex; align-items: center; justify-content: center; }
 .map-frame {
-  position: relative; width: 100%; max-width: 1100px; aspect-ratio: 920 / 710; min-height: 0;
+  position: relative; width: 100%; max-width: 980px; aspect-ratio: 920 / 710; min-height: 0;
   border-radius: 24px; overflow: hidden; background: #163c7a;
 }
 .lane-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 .lane-svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.lane-outline path { stroke: var(--lane-outline); stroke-width: 84; }
-.lane-road path { stroke: var(--lane); stroke-width: 68; }
+.lane-outline path { stroke: var(--lane-outline); stroke-width: 78; }
+.lane-road path { stroke: var(--lane); stroke-width: 62; }
 .label { position: absolute; z-index: 2; text-shadow: 0 2px 0 rgba(0,0,0,0.38); pointer-events: none; }
-.label strong { display: block; font-size: 1.1rem; }
+.label strong { display: inline-flex; align-items: center; gap: 6px; font-size: 1.1rem; }
 .label span { display: block; color: var(--orange); font-size: 0.95rem; font-weight: 900; }
-.present-label { left: 4.5%; top: 15%; }
-.cash-label { left: 37.5%; top: 15%; }
-.order1-label { left: 58.5%; top: 33%; text-align: left; }
-.order2-label { left: 84.5%; top: 28%; text-align: left; }
+.present-label { left: 22.8%; top: 20.5%; transform: translate(-50%, 0); text-align: center; }
+.cash-label { left: 47.2%; top: 20.5%; transform: translate(-50%, 0); text-align: center; }
+.order1-label { left: 58.6%; top: 38.2%; transform: translate(-100%, -50%); text-align: right; }
+.order2-label { left: 84.1%; top: 36.8%; transform: translate(0, -50%); text-align: left; }
 .cars-layer { position: absolute; inset: 0; z-index: 3; }
 .car {
-  position: absolute; width: 11.2%; max-width: 102px; min-width: 72px; aspect-ratio: 102 / 44;
+  position: absolute; width: 10.6%; max-width: 96px; min-width: 68px; aspect-ratio: 102 / 44;
   transition: left 0.85s linear, top 0.85s linear, transform 0.85s linear; pointer-events: none;
 }
 .car img { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.28)); }
@@ -118,6 +118,13 @@ th { color: var(--muted); font-weight: 700; }
   border-radius: 999px; background: rgba(7,20,45,0.86); color: white; font-size: 0.82rem;
   line-height: 24px; text-align: center; font-weight: 900;
 }
+.ready-tick {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.2rem; height: 1.2rem; border-radius: 999px;
+  background: rgba(88, 223, 66, 0.18); color: var(--green); border: 1px solid rgba(88, 223, 66, 0.55);
+  font-size: 0.9rem; font-weight: 900; line-height: 1;
+}
+.ready-tick.is-hidden { visibility: hidden; }
 .lane-summary {
   position: absolute; right: 3%; bottom: 4%; width: 26%; min-width: 220px; border-radius: 18px;
   border: 2px solid rgba(255,255,255,0.4); background: rgba(15,25,59,0.76); padding: 16px; z-index: 2;
@@ -153,6 +160,10 @@ body.fullscreen-mode .map-panel { min-height: 0; }
 body.fullscreen-mode .scoreboard { height: 100%; padding: 18px 22px; overflow: auto; }
 body.fullscreen-mode .map-panel { height: 100%; padding: 8px; }
 body.fullscreen-mode .map-frame { width: 100%; height: auto; max-width: none; }
+body.fullscreen-mode .present-label { top: 20.5%; }
+body.fullscreen-mode .cash-label { top: 20.5%; }
+body.fullscreen-mode .order1-label { top: 38.2%; }
+body.fullscreen-mode .order2-label { top: 36.8%; }
 body.fullscreen-mode .exit-fullscreen { display: inline-flex; align-items: center; }
 @media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr; } }
 @media (max-width: 780px) {
