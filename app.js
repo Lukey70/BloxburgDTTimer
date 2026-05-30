@@ -314,13 +314,13 @@ const POSITION_UI = {
   gap_present1: { x: 300, y: 112, rotation: 180 },
   cash: { x: 424, y: 112, rotation: 180 },
   gap_cash1: { x: 548, y: 112, rotation: 180 },
-  gap_cash2: { x: 706, y: 188, rotation: -134 },
+  gap_cash2: { x: 736, y: 184, rotation: -124 },
   order1: { x: 646, y: 270, rotation: -90 },
   order2: { x: 758, y: 262, rotation: -90 },
-  lane1_pre1: { x: 646, y: 392, rotation: -90 },
-  lane1_pre2: { x: 646, y: 512, rotation: -90 },
-  lane2_pre1: { x: 758, y: 392, rotation: -90 },
-  lane2_pre2: { x: 758, y: 512, rotation: -90 },
+  lane1_pre1: { x: 646, y: 404, rotation: -90 },
+  lane1_pre2: { x: 646, y: 536, rotation: -90 },
+  lane2_pre1: { x: 758, y: 404, rotation: -90 },
+  lane2_pre2: { x: 758, y: 536, rotation: -90 },
 };
 
 const simulator = new DriveThruSimulator(loadState());

@@ -124,3 +124,11 @@ This version embeds the audio files directly into `app.js` and uses the Web Audi
 - Extended the visual entry lane a touch further again and moved the spawn centres so cars start fully inside the lane.
 - Extended the present lane a touch further again so the present car sits fully inside the lane.
 - Fine-tuned the Lane 2 merge-turn car again to sit closer to the centre of the curved lane.
+
+
+## Latest visual alignment changes
+
+- Fine-tuned the Lane 2 merge-turn car again so it sits closer to the true centre of the curved lane.
+- Moved Order 1 and Order 2 labels slightly further right.
+- Moved Cash and Present labels slightly downward.
+- Widened the left-side results area so each section fits more cleanly on a single line.
